@@ -40,9 +40,7 @@ class CustomWatchViewController: UIViewController {
 
      var watchViewOption: Int = 0 {
         didSet{
-            
             setWatchColorAndView(viewOptionIndex: watchViewOption)
-
         }
     }
     
@@ -82,7 +80,6 @@ class CustomWatchViewController: UIViewController {
         
         if state == .changed {
             
-            
             if isSettingsAreaOpened{
                 
                 if translationY > 0 && translationY < heightConstraint {
@@ -103,7 +100,6 @@ class CustomWatchViewController: UIViewController {
         }
         
         if state == .ended {
-            
             
             
             if velocityY > 150 {
@@ -172,13 +168,13 @@ class CustomWatchViewController: UIViewController {
         setupScenekit()
     }
     
-    private func setupScenekit(){
+    fileprivate func setupScenekit(){
         watchCaseNode = scene.rootNode.childNode(withName: "watchCase", recursively: true)!
         watchBandNode = scene.rootNode.childNode(withName: "watchBand", recursively: true)!
         scenekitView.scene = self.scene
     }
     
-    private func setupDesign() {
+    fileprivate func setupDesign() {
         
         for button in showHideButtons {
             button.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
@@ -189,7 +185,7 @@ class CustomWatchViewController: UIViewController {
         for button in viewOptionButtons {
             button.addTarget(self, action:#selector(viewOptionButtonDidPress(button:)), for: .touchUpInside)
             setupContentEdgeInsetsButton(button: button)
-            setupRoundedView(view: button)
+            button.rounded()
         }
         
         setButtonSelectedState(views: viewOptionButtons,selectedBankgroundColor: Constants.designs.colors.white, animated: false)
@@ -198,13 +194,10 @@ class CustomWatchViewController: UIViewController {
         for button in caseButtons {
             button.addTarget(self, action:#selector(caseButtonDidPress(button:)), for: .touchUpInside)
             setupContentEdgeInsetsButton(button: button)
-            setupRoundedView(view: button)
+            button.rounded()
         }
         
         setButtonSelectedState(views: caseButtons, animated: false)
-        
-        
-        
         
         caseAluminumColorPalleteAreaViews = setupColorPalleteArea(buttons: caseAluminumColorButtons)
         setColorButtonSelectedState(views: caseAluminumColorPalleteAreaViews, animated: false)
@@ -218,14 +211,12 @@ class CustomWatchViewController: UIViewController {
         }
         
         for view in caseAluminumColorPalleteAreaViews {
-            setupRoundedView(view: view)
+            view.rounded()
             if let index = caseAluminumColorPalleteAreaViews.index(of: view) {
                 view.backgroundColor = watchOptionData.pallete.caseAluminum[index].palleteColor
                 
             }
         }
-        
-        
         
         
         caseStainlessSteelColorPalleteAreaViews = setupColorPalleteArea(buttons: caseStainlessSteelColorButtons)
@@ -240,14 +231,12 @@ class CustomWatchViewController: UIViewController {
         }
         
         for view in caseStainlessSteelColorPalleteAreaViews {
-            setupRoundedView(view: view)
+            view.rounded()
             if let index = caseStainlessSteelColorPalleteAreaViews.index(of: view) {
                 view.backgroundColor = watchOptionData.pallete.caseStainlessSteel[index].palleteColor
                 
             }
         }
-        
-        
         
         
         bandColorPalleteAreaViews = setupColorPalleteArea(buttons: bandColorButtons)
@@ -262,7 +251,7 @@ class CustomWatchViewController: UIViewController {
         }
         
         for view in bandColorPalleteAreaViews {
-            setupRoundedView(view: view)
+            view.rounded()
             if let index = bandColorPalleteAreaViews.index(of: view) {
                 view.backgroundColor = watchOptionData.pallete.band[index].palleteColor
                 
@@ -347,8 +336,6 @@ class CustomWatchViewController: UIViewController {
         }
     }
     
-    
-    
     func caseAluminumColorButtonDidTouchDragOutside(button: UIButton) {
         setAllColorButtonHighlightedState(views: caseAluminumColorPalleteAreaViews)
     }
@@ -361,7 +348,7 @@ class CustomWatchViewController: UIViewController {
         setAllColorButtonHighlightedState(views: bandColorPalleteAreaViews)
     }
     
-    private func setupColorPalleteArea(buttons: [UIButton]) -> [UIView] {
+    fileprivate func setupColorPalleteArea(buttons: [UIButton]) -> [UIView] {
         
         var palleteAreaViews = [UIView]()
         for button in buttons {
@@ -377,20 +364,13 @@ class CustomWatchViewController: UIViewController {
         return palleteAreaViews
     }
     
-    private func setupRoundedView(view: UIView){
-        
-        let radiusValue = view.bounds.height / 2
-        view.layer.cornerRadius = radiusValue
-        
-    }
-    
-    private func setupContentEdgeInsetsButton(button: UIButton){
+    fileprivate func setupContentEdgeInsetsButton(button: UIButton){
         let radiusValue = button.bounds.height / 2
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: radiusValue, bottom: 0, right: radiusValue)
         
     }
     
-    private func setAllColorButtonHighlightedState(views: [UIView], animated:Bool = true){
+    fileprivate func setAllColorButtonHighlightedState(views: [UIView], animated:Bool = true){
         
         Constants.designs.animations.defaultTertiaryAnimate(animations: {
             for view in views {
@@ -400,7 +380,7 @@ class CustomWatchViewController: UIViewController {
         
     }
     
-    private func setColorButtonHighlightedState(views: [UIView], index: Int = 0, animated:Bool = false){
+    fileprivate func setColorButtonHighlightedState(views: [UIView], index: Int = 0, animated:Bool = false){
         
         Constants.designs.animations.defaultTertiaryAnimate(animations: {
             for view in views {
@@ -411,7 +391,7 @@ class CustomWatchViewController: UIViewController {
     
     }
     
-    private func setColorButtonSelectedState(views: [UIView], index: Int = 0, animated:Bool = true){
+    fileprivate func setColorButtonSelectedState(views: [UIView], index: Int = 0, animated:Bool = true){
         Constants.designs.animations.defaultTertiaryAnimate(animations: {
             for view in views {
                 let scaleValue = views.index(of: view) == index ? CGAffineTransform(scaleX: 1, y: 1) : CGAffineTransform(scaleX: 0.5, y: 0.5)
@@ -423,7 +403,7 @@ class CustomWatchViewController: UIViewController {
         
     }
     
-    private func setButtonSelectedState(views: [UIView], index: Int = 0, selectedBankgroundColor: UIColor = Constants.designs.colors.whiteMuted, animated:Bool = true){
+    fileprivate func setButtonSelectedState(views: [UIView], index: Int = 0, selectedBankgroundColor: UIColor = Constants.designs.colors.whiteMuted, animated:Bool = true){
         
         Constants.designs.animations.defaultTertiaryAnimate(animations: {
             for view in views {
@@ -438,13 +418,13 @@ class CustomWatchViewController: UIViewController {
     }
     
     
-    private func setViewBackgroundColor(color: UIColor, animated: Bool = true){
+    fileprivate func setViewBackgroundColor(color: UIColor, animated: Bool = true){
         Constants.designs.animations.defaultPrimaryAnimate(animations: {
             self.view.backgroundColor = color
         }, animated: animated)
     }
     
-    private func setWatchColorAndView(viewOptionIndex: Int? = nil,
+    fileprivate func setWatchColorAndView(viewOptionIndex: Int? = nil,
                                       caseMaterialIndex: Int? = nil,
                                       caseColorIndex: Int? = nil,
                                       bandColorIndex: Int? = nil,

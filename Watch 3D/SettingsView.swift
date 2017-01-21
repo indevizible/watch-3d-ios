@@ -17,6 +17,8 @@ class SettingsView: UIView {
     var bandColorPalleteAreaViews = [UIView]()
     
     override func awakeFromNib() {
+        super.awakeFromNib()
+        
         setupDesign()
     }
     
@@ -25,7 +27,7 @@ class SettingsView: UIView {
         for button in caseButtons {
             button.addTarget(self, action:#selector(caseButtonDidPress(button:)), for: .touchUpInside)
             setupContentEdgeInsetsButton(button: button)
-            setupRoundedView(view: button)
+            button.rounded()
         }
         
         setButtonSelectedState(views: caseButtons, animated: false)
@@ -38,7 +40,7 @@ class SettingsView: UIView {
         }
         
         for view in caseColorPalleteAreaViews {
-            setupRoundedView(view: view)
+            view.rounded()
         }
         
         bandColorPalleteAreaViews = setupColorPalleteArea(buttons: bandColorButtons)
@@ -49,9 +51,8 @@ class SettingsView: UIView {
         }
         
         for view in bandColorPalleteAreaViews {
-            setupRoundedView(view: view)
+            view.rounded()
         }
-        
     }
     
     func caseButtonDidPress(button: UIButton) {
@@ -73,27 +74,16 @@ class SettingsView: UIView {
     }
     
     private func setupColorPalleteArea(buttons: [UIButton]) -> [UIView] {
-        
-        var palleteAreaViews = [UIView]()
-        for button in buttons {
-            button.backgroundColor = UIColor.clear
-            let palleteAreaView = UIView(frame: button.bounds)
+
+        return buttons.map {
+            $0.backgroundColor = UIColor.clear
+            let palleteAreaView = UIView(frame: $0.bounds)
             palleteAreaView.isUserInteractionEnabled = false
             palleteAreaView.clipsToBounds = true
             palleteAreaView.backgroundColor = UIColor.red
-            button.addSubview(palleteAreaView)
-            palleteAreaViews.append(palleteAreaView)
-            
+            $0.addSubview(palleteAreaView)
+            return $0 as UIView
         }
-        
-        return palleteAreaViews
-    }
-    
-    private func setupRoundedView(view: UIView){
-        
-        let radiusValue = view.bounds.height / 2
-        view.layer.cornerRadius = radiusValue
-        
     }
     
     private func setupContentEdgeInsetsButton(button: UIButton){
@@ -119,7 +109,7 @@ class SettingsView: UIView {
             for view in views {
                 let isSelected = views.index(of: view) == index
                 let backgroundColor = isSelected ? Constants.designs.colors.whiteMuted : Constants.designs.colors.whiteMuted.withAlphaComponent(0)
-                let alphaValue = isSelected ? CGFloat(1) : Constants.designs.colors.disableAlpha
+                let alphaValue: CGFloat = isSelected ? 1 : Constants.designs.colors.disableAlpha
                 view.backgroundColor = backgroundColor
                 view.alpha = alphaValue
             }

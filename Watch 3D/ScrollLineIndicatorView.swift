@@ -13,60 +13,80 @@ import UIKit
 
 class ScrollLineIndicator: UIView {
     
+    var basedColor: UIColor = .gray {
+        didSet {
+            backgroundColor = basedColor
+        }
+    }
+    var indicatorColor: UIColor = .darkGray {
+        didSet {
+            indicatorView.backgroundColor = indicatorColor
+        }
+    }
     
-    var basedColor: UIColor = UIColor.gray
-    var indicatorColor: UIColor = UIColor.darkGray
+    var isRounded = false {
+        didSet {
+            let cornerRadiusValue = isRounded ? bounds.height / 2 : 0
+            
+            layer.cornerRadius = cornerRadiusValue
+            indicatorView.layer.cornerRadius = cornerRadiusValue
+        }
+    }
     
-    var isRounded: Bool = false
-    
-    let indicatorView: UIView = UIView()
+    let indicatorView = UIView()
     var widthConstraint = NSLayoutConstraint()
 
     var contentLength: CGFloat = 2 {
         didSet{
-            self.widthConstraint.constant = visibleLength / contentLength * self.bounds.width
+            widthConstraint.constant = visibleLength / contentLength * self.bounds.width
         }
     }
     var visibleLength: CGFloat = 1
     
     var contentOffset: CGFloat = 0.0 {
         didSet{
-            self.indicatorView.transform.tx = contentOffset / contentLength * self.bounds.width
+            indicatorView.transform.tx = contentOffset / contentLength * self.bounds.width
         }
     }
     
-    override func layoutSubviews() {
+    override func awakeFromNib() {
+        super.awakeFromNib()
         setupDesign()
     }
     
     private func setupDesign() {
         
-        self.indicatorView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(self.indicatorView)
+        indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(self.indicatorView)
         
         let widthValue: CGFloat = visibleLength / contentLength * self.bounds.width
-        let topConstraint = NSLayoutConstraint(item: indicatorView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.top, multiplier: 1, constant: 0)
-        let bottomConstraint = NSLayoutConstraint(item: indicatorView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: 0)
-        let leadingConstraint = NSLayoutConstraint(item: indicatorView, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 0)
-        self.self.widthConstraint = NSLayoutConstraint(item: indicatorView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: widthValue)
-        self.addConstraints([topConstraint, bottomConstraint, leadingConstraint, self.widthConstraint])
+        let attrs: [NSLayoutAttribute] = [.top, .bottom, .leading]
+        var constrants = attrs.map {
+            NSLayoutConstraint(item: indicatorView,
+                               attribute: $0,
+                               relatedBy: .equal, toItem: self,
+                               attribute: $0,
+                               multiplier: 1, constant: 0)
+        }
+
+        widthConstraint = NSLayoutConstraint(item: indicatorView,
+                                             attribute: .width,
+                                             relatedBy: .equal, toItem: nil,
+                                             attribute: .notAnAttribute,
+                                             multiplier: 1, constant: widthValue)
+        constrants.append(widthConstraint)
+        self.addConstraints(constrants)
         
         // set ClipsToBounds
-        let cornerRadiusValue = isRounded ? self.bounds.height / 2 : 0
+        isRounded = false
         
-        self.layer.cornerRadius = cornerRadiusValue
-        indicatorView.layer.cornerRadius = cornerRadiusValue
-        
-        self.clipsToBounds = true
+        clipsToBounds = true
         indicatorView.clipsToBounds = true
         
-        self.backgroundColor = basedColor
-        
+        backgroundColor = basedColor
         indicatorView.backgroundColor = indicatorColor
+        setNeedsUpdateConstraints()
+        setNeedsLayout()
         
     }
-    
-    
-    
-    
 }

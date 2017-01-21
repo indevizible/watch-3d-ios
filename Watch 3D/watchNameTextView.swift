@@ -8,7 +8,7 @@
 
 import UIKit
 
-class watchNameTextView: UIView {
+class WatchNameTextView: UIView {
     @IBOutlet weak var watchNameLabel: UILabel!
     
     var watchNameText: String = ""

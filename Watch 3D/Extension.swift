@@ -301,3 +301,12 @@ struct Constants {
         }
     }
 }
+
+extension UIView {
+    func rounded() {
+        let radiusValue = bounds.height / 2
+        layer.cornerRadius = radiusValue
+        layer.masksToBounds = true
+        clipsToBounds = true
+    }
+}

@@ -635,7 +635,7 @@
                         <viewControllerLayoutGuide type="top" id="tUW-dV-1FP"/>
                         <viewControllerLayoutGuide type="bottom" id="7mY-Ey-MWs"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Udt-0V-Rs1" customClass="watchNameTextView" customModule="Watch_3D" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="Udt-0V-Rs1" customClass="WatchNameTextView" customModule="Watch_3D" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="499"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
